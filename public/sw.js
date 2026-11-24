@@ -1,0 +1,14 @@
+// IT RAINS MINISTRIES service worker: push notifications.
+self.addEventListener("push", (event) => {
+  let data = { title: "IT RAINS MINISTRIES", body: "", url: "/" };
+  try { data = { ...data, ...event.data.json() }; } catch {}
+  event.waitUntil(self.registration.showNotification(data.title, { body: data.body, icon: "/logo.svg", badge: "/logo.svg", data: { url: data.url } }));
+});
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const url = (event.notification.data && event.notification.data.url) || "/";
+  event.waitUntil(clients.matchAll({ type: "window", includeUncontrolled: true }).then((list) => {
+    for (const c of list) if ("focus" in c && c.url.endsWith(url)) return c.focus();
+    return clients.openWindow(url);
+  }));
+});
