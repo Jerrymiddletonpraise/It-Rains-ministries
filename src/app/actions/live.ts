@@ -3,9 +3,23 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireArea } from "@/lib/auth";
 import { enabled, env } from "@/lib/env";
+import { parseExtraLinks } from "@/lib/utils";
 import { createRtmpIngress, ensureRoom, publisherToken, startRecording, stopRecording, participantCount } from "@/lib/livekit";
 import type { ActionState } from "@/components/forms/ActionForm";
 import { sendPushToAll } from "@/lib/push";
+
+function url(f: FormData, k: string) {
+  const v = String(f.get(k) ?? "").trim();
+  try { return v && ["http:", "https:"].includes(new URL(v).protocol) ? v : null; } catch { return null; }
+}
+/** Links to the same broadcast on YouTube, Facebook, Instagram, TikTok and any other app. */
+function platformFields(f: FormData) {
+  return {
+    youtube_url: url(f, "youtube_url"), facebook_url: url(f, "facebook_url"),
+    instagram_url: url(f, "instagram_url"), tiktok_url: url(f, "tiktok_url"),
+    extra_links: parseExtraLinks(String(f.get("extra_links") ?? "")),
+  };
+}
 
 export async function createStream(_: ActionState, f: FormData): Promise<ActionState> {
   const { supabase, user } = await requireArea("live");
@@ -13,9 +27,11 @@ export async function createStream(_: ActionState, f: FormData): Promise<ActionS
   if (title.length < 3) return { ok: false, message: "Please give the broadcast a title." };
   const source = String(f.get("source") ?? "browser");
   const iso = String(f.get("scheduled_for__iso") ?? "");
+  if (source === "youtube" && !url(f, "youtube_url")) return { ok: false, message: "Paste the YouTube live link." };
+  if (source === "facebook" && !url(f, "facebook_url")) return { ok: false, message: "Paste the Facebook live video link." };
   const { data, error } = await supabase.from("streams").insert({
-    title, description: String(f.get("description") ?? ""), source: ["browser", "rtmp", "youtube"].includes(source) ? source : "browser",
-    youtube_url: String(f.get("youtube_url") ?? "") || null, scheduled_for: iso || null,
+    title, description: String(f.get("description") ?? ""), source: ["browser", "rtmp", "youtube", "facebook"].includes(source) ? source : "browser",
+    ...platformFields(f), scheduled_for: iso || null,
     record: f.get("record") === "on", chat_enabled: f.get("chat_enabled") === "on", created_by: user.id,
   }).select("id").single();
   if (error) return { ok: false, message: error.message };
@@ -39,12 +55,12 @@ export async function setStreamStatus(streamId: string, status: "live" | "paused
   const update: Record<string, unknown> = { status };
   if (status === "live" && !s.started_at) update.started_at = new Date().toISOString();
   if (status === "ended") update.ended_at = new Date().toISOString();
-  if (status === "ended" && enabled.livekit && s.source !== "youtube") update.peak_viewers = Math.max(s.peak_viewers, await participantCount(s.room_name));
+  if (status === "ended" && enabled.livekit && !["youtube", "facebook"].includes(s.source)) update.peak_viewers = Math.max(s.peak_viewers, await participantCount(s.room_name));
   const { error } = await supabase.from("streams").update(update).eq("id", streamId);
   if (error) return { error: error.message };
 
   let recording: string | null = null;
-  if (s.source !== "youtube" && enabled.livekit) {
+  if (!["youtube", "facebook"].includes(s.source) && enabled.livekit) {
     const { data: sec } = await supabase.from("stream_secrets").select("egress_id").eq("stream_id", streamId).single();
     if (status === "live" && s.record && !sec?.egress_id) {
       if (!enabled.recording) recording = "Recording is not configured (RECORDING_S3_* variables), so this broadcast is not being recorded.";
@@ -78,7 +94,7 @@ export async function createIngressForStream(streamId: string) {
 export async function updateStreamSettings(streamId: string, f: FormData) {
   const { supabase } = await requireArea("live");
   await supabase.from("streams").update({
-    title: String(f.get("title") ?? ""), description: String(f.get("description") ?? ""), youtube_url: String(f.get("youtube_url") ?? "") || null,
+    title: String(f.get("title") ?? ""), description: String(f.get("description") ?? ""), ...platformFields(f),
     chat_enabled: f.get("chat_enabled") === "on", record: f.get("record") === "on",
   }).eq("id", streamId);
   revalidatePath(`/admin/live/${streamId}`); revalidatePath("/watch");

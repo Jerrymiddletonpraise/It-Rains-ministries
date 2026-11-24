@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Clock, HandHeart, Gift, Megaphone, Quote, Radio, Globe, Mail, Phone, MapPin } from "lucide-react";
+import { detectYoutubeLive } from "@/lib/youtube";
 import { getAnnouncements, getCurrentStream, getDepartments, getMedia, getSetting, getTestimonies, getUpcomingEvents } from "@/lib/data";
 import { ButtonLink, Card, Empty, Heading, Section } from "@/components/ui";
 import { DepartmentCard, EventCard, SermonCard } from "@/components/cards";
@@ -17,7 +18,9 @@ export default async function Home() {
     getSetting("home"), getSetting("services"), getSetting("contact"), getSetting("social"), getCurrentStream(),
     getMedia({ limit: 3 }), getUpcomingEvents(4), getDepartments(), getTestimonies(3), getAnnouncements(3),
   ]);
-  const live = stream?.status === "live";
+  const yt = stream && ["live", "paused"].includes(stream.status) ? null : await detectYoutubeLive(social.youtube);
+  const shown = yt ? { title: yt.title, status: "live", scheduled_for: null } : stream;
+  const live = shown?.status === "live";
 
   return (
     <>
@@ -33,7 +36,7 @@ export default async function Home() {
           <p className="animate-fade-up text-xs font-bold uppercase tracking-[0.4em] text-gold-400 sm:text-sm">Welcome home</p>
           <h1 className="mt-4 animate-fade-up font-serif text-5xl font-bold leading-[1.05] text-white [animation-delay:120ms] sm:text-6xl md:text-7xl lg:text-8xl">
             {home.hero_title.replace("IT RAINS MINISTRIES", "")}
-            <span className="text-gold-gradient block">IT RAINS MINISTRIES</span>
+            <span className="text-brand-name mt-3 block font-display text-[2.1rem] font-black uppercase leading-[1.05] tracking-[0.04em] sm:text-5xl md:text-6xl lg:text-7xl">IT RAINS<span className="block text-[0.42em] font-semibold tracking-[0.5em]">MINISTRIES</span></span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl animate-fade-up font-serif text-2xl italic text-white/85 [animation-delay:240ms] md:text-3xl">{home.hero_subtitle}</p>
           <div className="mt-10 flex animate-fade-up flex-col items-center justify-center gap-3 [animation-delay:360ms] sm:flex-row">
@@ -44,7 +47,7 @@ export default async function Home() {
             <ButtonLink href="/give" variant="outline" className="w-full px-8 py-4 text-base sm:w-auto">Give Online</ButtonLink>
             <ButtonLink href="/prayer" variant="ghost" className="w-full px-8 py-4 text-base text-white hover:bg-white/10 sm:w-auto">Request Prayer</ButtonLink>
           </div>
-          <LiveStrip stream={stream} />
+          <LiveStrip stream={shown} />
         </div>
       </section>
 
@@ -201,7 +204,7 @@ export default async function Home() {
   );
 }
 
-function LiveStrip({ stream }: { stream: Awaited<ReturnType<typeof getCurrentStream>> }) {
+function LiveStrip({ stream }: { stream: { title: string; status: string; scheduled_for: string | null } | null }) {
   if (!stream) return (
     <p className="mt-10 flex items-center justify-center gap-2 text-sm text-white/60"><Globe className="h-4 w-4" />Join us online from any nation, every service is streamed live.</p>
   );

@@ -26,7 +26,7 @@ insert into public.site_settings (key, value) values
   'office_hours', 'Monday to Friday, 9:00 AM to 5:00 PM'
 )),
 ('social', jsonb_build_object(
-  'facebook', '', 'youtube', '', 'instagram', '', 'tiktok', '', 'x', ''
+  'facebook', '', 'youtube', '', 'instagram', '', 'tiktok', '', 'x', '', 'whatsapp_channel', '', 'telegram', ''
 )),
 ('services', jsonb_build_array(
   jsonb_build_object('day','Sunday','name','Sunday Worship Service','time','9:00 AM','online',true),

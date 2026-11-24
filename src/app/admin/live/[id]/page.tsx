@@ -10,7 +10,8 @@ import { LiveChat } from "@/components/live/LiveChat";
 import { updateStreamSettings, deleteStream } from "@/app/actions/live";
 import { ConfirmButton } from "@/components/admin/ConfirmButton";
 import { Notice, inputCls } from "@/components/ui";
-import { toEmbedUrl } from "@/lib/utils";
+import { streamPlatforms } from "@/lib/utils";
+import { PlatformFields } from "@/components/admin/PlatformFields";
 
 export default async function StudioPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -24,15 +25,19 @@ export default async function StudioPage({ params }: { params: Promise<{ id: str
   return (
     <>
       <Link href="/admin/live" className="text-sm font-semibold text-royal-700">← All broadcasts</Link>
-      <AdminHeader title={s.title} intro={s.source === "rtmp" ? "OBS / RTMP broadcast" : s.source === "youtube" ? "YouTube Live embed" : "Browser camera broadcast"}
+      <AdminHeader title={s.title} intro={s.source === "rtmp" ? "OBS / RTMP broadcast" : s.source === "youtube" ? "YouTube Live embed" : s.source === "facebook" ? "Facebook Live embed" : "Browser camera broadcast"}
         action={<div className="flex items-center gap-3"><Badge tone={s.status === "live" ? "red" : s.status === "paused" ? "gold" : "purple"}>{s.status}</Badge><a href="/watch" target="_blank" className="text-sm font-semibold text-royal-700">Open public page ↗</a></div>} />
       <div className="grid gap-6 xl:grid-cols-[1fr_380px]">
         <div className="space-y-6">
           {s.source === "browser" && (enabled.livekit ? <Studio streamId={id} status={s.status} /> : <Notice kind="warn">Add the LiveKit credentials to stream from this browser.</Notice>)}
           {s.source === "rtmp" && <RtmpPanel streamId={id} status={s.status} rtmpUrl={secret?.rtmp_url ?? null} streamKey={secret?.stream_key ?? null} livekit={enabled.livekit} />}
-          {s.source === "youtube" && (
+          {["youtube", "facebook"].includes(s.source) && (
             <div className="space-y-4 rounded-2xl bg-white p-6 shadow-sm">
-              {toEmbedUrl(s.youtube_url) ? <div className="relative aspect-video overflow-hidden rounded-xl"><iframe src={toEmbedUrl(s.youtube_url)!} className="absolute inset-0 h-full w-full" title="Preview" allowFullScreen /></div> : <Notice kind="warn">Add a valid YouTube URL below.</Notice>}
+              {(() => {
+                const main = streamPlatforms(s).find((p) => p.key === s.source && p.embed);
+                return main ? <div className="relative aspect-video overflow-hidden rounded-xl"><iframe src={main.embed!} className="absolute inset-0 h-full w-full" title="Preview" allowFullScreen /></div>
+                  : <Notice kind="warn">Add a valid {s.source === "facebook" ? "Facebook" : "YouTube"} live link below.</Notice>;
+              })()}
               <RtmpPanel streamId={id} status={s.status} rtmpUrl={null} streamKey={null} livekit={false} youtube />
             </div>
           )}
@@ -40,7 +45,7 @@ export default async function StudioPage({ params }: { params: Promise<{ id: str
             <h2 className="font-serif text-2xl font-bold md:col-span-2">Broadcast settings</h2>
             <label className="text-sm font-medium md:col-span-2">Title<input name="title" defaultValue={s.title} className={inputCls} /></label>
             <label className="text-sm font-medium md:col-span-2">Description<textarea name="description" rows={2} defaultValue={s.description} className={inputCls} /></label>
-            <label className="text-sm font-medium md:col-span-2">YouTube URL (for YouTube broadcasts)<input name="youtube_url" defaultValue={s.youtube_url ?? ""} className={inputCls} /></label>
+            <PlatformFields values={s} main={s.source} />
             <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="chat_enabled" defaultChecked={s.chat_enabled} className="accent-royal-700" />Live chat enabled</label>
             <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="record" defaultChecked={s.record} className="accent-royal-700" />Record broadcast</label>
             <button className="rounded-full bg-royal-700 px-6 py-2.5 text-sm font-semibold text-white md:col-span-2 md:w-max">Save settings</button>

@@ -17,6 +17,7 @@
   --color-ivory: #faf7ef;
   --font-serif: var(--font-cormorant), Georgia, serif;
   --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-orbitron), "Arial Black", system-ui, sans-serif;
   --animate-fade-up: fade-up 0.8s ease-out both;
   --animate-rain: rain 2.6s linear infinite;
   --animate-pulse-ring: pulse-ring 1.8s ease-out infinite;
@@ -48,3 +49,9 @@ body { background: var(--color-ivory); color: var(--color-navy-900); font-family
 .prose-irm ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
 
 :focus-visible { outline: 3px solid var(--color-gold-500); outline-offset: 2px; }
+
+/* Futuristic brand name: chrome-white to gold sheen */
+.text-chrome { background: linear-gradient(180deg, #ffffff 0%, #f3ecff 45%, #e6c35c 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.text-brand-name { background: linear-gradient(100deg, #fff3c4 0%, #e6c35c 35%, #ffffff 50%, #e6c35c 65%, #b8862a 100%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: brand-sheen 7s ease-in-out infinite; filter: drop-shadow(0 0 24px rgba(230,195,92,.25)); }
+@keyframes brand-sheen { 0%, 100% { background-position: 100% 0; } 50% { background-position: 0 0; } }
+@media (prefers-reduced-motion: reduce) { .text-brand-name { animation: none; } }

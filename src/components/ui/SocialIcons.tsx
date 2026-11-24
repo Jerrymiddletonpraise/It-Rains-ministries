@@ -21,6 +21,10 @@ export const WhatsappIcon = ({ className = "h-5 w-5" }: P) => (
   <svg viewBox="0 0 24 24" className={className} aria-hidden="true"><path {...s} d="M4 20l1.3-3.9A8 8 0 1 1 8.2 19z" /><path fill="currentColor" d="M9.2 8.3c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.7 1.6c.1.3 0 .5-.1.6l-.5.6c-.1.2-.1.3 0 .5.5.9 1.3 1.7 2.3 2.2.2.1.4.1.5-.1l.6-.7c.2-.2.4-.2.6-.1l1.6.8c.3.1.4.3.3.6-.1.9-.9 1.6-1.8 1.7-1 .1-2.5-.3-4.2-1.8-1.7-1.6-2.4-3.2-2.4-4.2 0-.6.3-1.2.7-1.7z" /></svg>
 );
 
+export const TelegramIcon = ({ className = "h-5 w-5" }: P) => (
+  <svg viewBox="0 0 24 24" className={className} aria-hidden="true"><path {...s} d="M21 4L3 11l6 2.5M21 4l-3 16-6-5.5M21 4L9 13.5v5l3-3.5" /></svg>
+);
+
 import type { SocialSettings } from "@/lib/defaults";
 export function SocialLinks({ social, className = "flex gap-3" }: { social: SocialSettings; className?: string }) {
   const items = [
@@ -29,6 +33,8 @@ export function SocialLinks({ social, className = "flex gap-3" }: { social: Soci
     { href: social.instagram, label: "Instagram", Icon: InstagramIcon },
     { href: social.tiktok, label: "TikTok", Icon: TiktokIcon },
     { href: social.x, label: "X", Icon: XIcon },
+    { href: social.whatsapp_channel, label: "WhatsApp channel", Icon: WhatsappIcon },
+    { href: social.telegram, label: "Telegram", Icon: TelegramIcon },
   ].filter((i) => i.href);
   if (!items.length) return null;
   return (

@@ -11,13 +11,17 @@ import { NotifyButton } from "@/components/live/NotifyButton";
 import { SermonCard } from "@/components/cards";
 import { ButtonLink, Card, Empty, Heading, Section } from "@/components/ui";
 import { formatDateTime } from "@/lib/utils";
+import { detectYoutubeLive } from "@/lib/youtube";
+import { YoutubeIcon } from "@/components/ui/SocialIcons";
 
 export const metadata: Metadata = { title: "Watch Live", description: "Watch IT RAINS MINISTRIES church services live from anywhere in the world." };
 export const dynamic = "force-dynamic";
 
 export default async function Watch() {
-  const [stream, session, replays, services] = await Promise.all([getCurrentStream(), getSession(), getMedia({ category: "live_replay", limit: 6 }), getSetting("services")]);
+  const [stream, session, replays, services, social] = await Promise.all([getCurrentStream(), getSession(), getMedia({ category: "live_replay", limit: 6 }), getSetting("services"), getSetting("social")]);
   const onAir = stream && ["live", "paused"].includes(stream.status);
+  // Nobody created a broadcast here, but the ministry's YouTube channel is live: play it anyway.
+  const ytLive = onAir ? null : await detectYoutubeLive(social.youtube);
   return (
     <div className="bg-navy-950 pt-24">
       <LiveRefresher streamId={stream?.id ?? null} />
@@ -34,6 +38,27 @@ export default async function Watch() {
               </div>
             </div>
             <LiveChat streamId={stream.id} signedIn={Boolean(session.user)} isModerator={can(session.roles, "moderation")} chatEnabled={stream.chat_enabled} />
+          </div>
+        ) : ytLive ? (
+          <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
+            <div>
+              <LivePlayer livekit={false} stream={{
+                id: `youtube-${ytLive.videoId}`, title: ytLive.title, status: "live", source: "youtube", youtube_url: ytLive.url,
+                facebook_url: null, instagram_url: social.instagram || null, tiktok_url: social.tiktok || null,
+                extra_links: social.facebook ? [{ label: "Facebook page", url: social.facebook }] : [],
+              }} />
+              <h1 className="mt-5 font-serif text-3xl font-bold text-white md:text-4xl">{ytLive.title}</h1>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <ButtonLink href="/give">Give during service</ButtonLink>
+                <ButtonLink href="/prayer" variant="outline">Prayer request</ButtonLink>
+              </div>
+            </div>
+            <Card className="h-max">
+              <YoutubeIcon className="h-8 w-8 text-red-600" />
+              <p className="mt-3 font-serif text-2xl font-bold">Live on our YouTube channel</p>
+              <p className="mt-2 text-sm text-navy-800/75">This service is streaming on YouTube right now. Join the live chat there, and send prayer requests to our team from this website.</p>
+              <a href={ytLive.url} target="_blank" rel="noopener noreferrer" className="mt-4 inline-block rounded-full bg-red-600 px-5 py-2.5 text-sm font-bold text-white">Open live chat on YouTube ↗</a>
+            </Card>
           </div>
         ) : (
           <div className="bg-heaven rounded-3xl px-6 py-16 text-center text-white md:py-24">

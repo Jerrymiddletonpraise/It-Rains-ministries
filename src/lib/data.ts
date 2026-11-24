@@ -78,6 +78,8 @@ export type StreamRow = {
   id: string; title: string; description: string; status: string; source: string; room_name: string;
   youtube_url: string | null; scheduled_for: string | null; started_at: string | null; ended_at: string | null;
   recording_url: string | null; chat_enabled: boolean; peak_viewers: number;
+  facebook_url?: string | null; instagram_url?: string | null; tiktok_url?: string | null;
+  extra_links?: { label: string; url: string }[] | null;
 };
 
 export async function getCurrentStream(): Promise<StreamRow | null> {

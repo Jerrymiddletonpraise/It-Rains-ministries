@@ -19,11 +19,13 @@ All services below are **free**. The only unavoidable cost is the per-gift proce
 | 1 | **Supabase** (supabase.com) | Database, member login, live chat, file uploads | Free plan; projects pause after ~1 week with no activity (restore from the dashboard) | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` |
 | 2 | **Netlify or Vercel** | Hosting, HTTPS, custom domain | Free plan | — |
 | 3 | **YouTube** channel | Live streaming & automatic recordings (embedded on /watch) | Free; phone-app streaming needs 50 subscribers, webcam/OBS do not | none (paste the live link in Admin → Live) |
+| 3b | **Facebook, Instagram, TikTok** + **OBS Studio** with the free Multiple RTMP outputs plugin | Stream to every app at once; YouTube and Facebook play on /watch, the others get "Watch on" buttons | Free | none (see [MULTISTREAMING.md](MULTISTREAMING.md)) |
 | 4 | **Stripe** (stripe.com) | Card, Apple Pay, Google Pay, monthly giving | No monthly fee; small fee per gift | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` |
 | 5 | **PayPal Business** | One-time PayPal gifts | No monthly fee; small fee per gift | `NEXT_PUBLIC_PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_ENV` |
 | 6 | **Resend** (resend.com) | Confirmations, receipts, newsletters | Free up to 3,000 emails/month (100/day) | `RESEND_API_KEY`, `EMAIL_FROM`, `MINISTRY_INBOX_EMAIL` |
 | 7 | VAPID keys (generated, no account) | "Notify me when we go live" | Free | `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` |
 | 8 | *Optional:* Cloudflare Turnstile, Google Analytics 4 | Extra spam protection, analytics | Free | see `.env.example` |
+| — | Google Maps | Map on Contact and Events pages | Free, works with no key | `NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY` is optional |
 | — | *Optional, not required:* LiveKit Cloud + `RECORDING_S3_*` | Streaming straight to the site from a browser/OBS without YouTube | Usage-based beyond its free allowance | `LIVEKIT_*` |
 
 Also needed from the ministry: **logo files (if you have an existing one), photos of the pastor, church and services, the church address, phone/WhatsApp, email, social media links, service times, and the pastor's biography.** All of these are edited in **Admin → Website content**; no code changes needed.
@@ -36,7 +38,7 @@ Every variable is explained in [`.env.example`](.env.example).
 
 ### 1. Database
 1. Create a Supabase project.
-2. In **SQL Editor**, run `supabase/migrations/0001_init.sql`, then `supabase/seed.sql` (or `supabase db push` with the Supabase CLI).
+2. In **SQL Editor**, run `supabase/migrations/0001_init.sql`, then `supabase/migrations/0002_multiplatform_streams.sql`, then `supabase/seed.sql` (or `supabase db push` with the Supabase CLI).
 3. **Authentication → URL configuration:** set Site URL to your domain and add `https://YOUR-DOMAIN/auth/callback` to the redirect URLs.
 4. **Authentication → Emails → SMTP:** point Supabase at Resend's SMTP so sign-up and password emails come from your domain.
 
@@ -61,6 +63,8 @@ Sign in and open **/admin**. From **Members & roles** you can grant Pastor, Medi
 
 ### 5. Live streaming
 **Default (free): YouTube Live.** In YouTube Studio click *Create → Go live* (webcam or OBS), copy the share link, then in **Admin → Live broadcasts** create a broadcast with source *YouTube Live* and paste it. Viewers on /watch get the video plus the site's chat, private prayer requests, greetings, live viewer count and sharing; the page switches to live automatically. YouTube saves the recording; add it to the media library as a replay by pasting the same link.
+
+**Every platform at once (free).** Put your YouTube channel link in Admin → Website content → Social media links and /watch plays the channel automatically whenever it is live. Facebook Live is also a broadcast source, and each broadcast can list its Facebook, Instagram, TikTok and other live links (YouTube and Facebook play on the page; the rest get "Watch on" buttons). See [MULTISTREAMING.md](MULTISTREAMING.md) for streaming to all of them from one OBS with free tools.
 
 **Optional: streaming directly to the site (LiveKit).**
 1. Create a LiveKit Cloud project and copy the URL, key and secret.

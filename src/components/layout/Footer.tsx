@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { getSetting } from "@/lib/data";
-import { LogoMark } from "@/components/ui/Logo";
+import { LogoMark, Wordmark } from "@/components/ui/Logo";
 import { SocialLinks } from "@/components/ui/SocialIcons";
 import { NewsletterForm } from "@/components/forms/NewsletterForm";
 import { CookieSettingsLink } from "./CookieConsent";
@@ -22,10 +22,7 @@ export async function Footer() {
           <div>
             <div className="flex items-center gap-3">
               <LogoMark className="h-12 w-12" />
-              <div>
-                <p className="font-serif text-2xl font-bold tracking-widest text-white">IT RAINS</p>
-                <p className="text-xs font-semibold tracking-[0.35em] text-gold-500">MINISTRIES</p>
-              </div>
+              <Wordmark />
             </div>
             <p className="mt-5 text-sm leading-relaxed">A global family of worshippers carrying the presence of God to the nations. Where Heaven&apos;s Abundance Rains Upon Lives.</p>
             <SocialLinks social={social} className="mt-6 flex gap-3" />

@@ -6,7 +6,7 @@ import {
   LayoutDashboard, Radio, Film, Calendar, Megaphone, Church, HandHeart, Quote, Inbox, Gift, Send, FileText, Users, UsersRound, BarChart3, Menu, X, ExternalLink, LogOut,
 } from "lucide-react";
 import { can, ROLE_LABELS, type Area, type Role } from "@/lib/roles";
-import { LogoMark } from "@/components/ui/Logo";
+import { LogoMark, Wordmark } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
 
 const ITEMS: [string, string, Area, typeof Radio][] = [
@@ -24,7 +24,7 @@ export function AdminNav({ roles, email }: { roles: Role[]; email: string }) {
   return (
     <aside className="bg-navy-950 text-white lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
       <div className="flex items-center justify-between p-5">
-        <Link href="/admin" className="flex items-center gap-3"><LogoMark className="h-9 w-9" /><span className="font-serif text-lg font-bold tracking-widest">IT RAINS <span className="block text-[10px] tracking-[0.3em] text-gold-500">ADMIN</span></span></Link>
+        <Link href="/admin" className="flex items-center gap-3"><LogoMark className="h-9 w-9" /><Wordmark sub="ADMIN" /></Link>
         <button className="lg:hidden" onClick={() => setOpen(!open)} aria-label="Menu">{open ? <X /> : <Menu />}</button>
       </div>
       <nav className={cn("space-y-1 px-3 pb-6", !open && "hidden lg:block")}>

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Cormorant_Garamond, Inter, Orbitron } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -8,6 +8,7 @@ import { WhatsappButton } from "@/components/layout/WhatsappButton";
 import { env } from "@/lib/env";
 
 const serif = Cormorant_Garamond({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-cormorant", display: "swap" });
+const display = Orbitron({ subsets: ["latin"], weight: ["600", "800", "900"], variable: "--font-orbitron", display: "swap" });
 const sans = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
 export const metadata: Metadata = {
@@ -25,7 +26,7 @@ export const viewport: Viewport = { themeColor: "#0b1033", width: "device-width"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${serif.variable} ${sans.variable}`}>
+    <html lang="en" className={`${serif.variable} ${sans.variable} ${display.variable}`}>
       <body>
         <Header />
         <main id="main">{children}</main>

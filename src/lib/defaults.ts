@@ -7,7 +7,7 @@ export type HomeSettings = {
 };
 export type AboutSettings = { story: string; vision: string; mission: string; values: string[] };
 export type ContactSettings = { email: string; phone: string; whatsapp: string; address: string; map_query: string; office_hours: string };
-export type SocialSettings = { facebook: string; youtube: string; instagram: string; tiktok: string; x: string };
+export type SocialSettings = { facebook: string; youtube: string; instagram: string; tiktok: string; x: string; whatsapp_channel: string; telegram: string };
 
 export const DEFAULTS = {
   home: {
@@ -38,7 +38,7 @@ export const DEFAULTS = {
     map_query: "church",
     office_hours: "Monday to Friday, 9:00 AM to 5:00 PM",
   } as ContactSettings,
-  social: { facebook: "", youtube: "", instagram: "", tiktok: "", x: "" } as SocialSettings,
+  social: { facebook: "", youtube: "", instagram: "", tiktok: "", x: "", whatsapp_channel: "", telegram: "" } as SocialSettings,
   services: [
     { day: "Sunday", name: "Sunday Worship Service", time: "9:00 AM", online: true },
     { day: "Wednesday", name: "Midweek Bible Study", time: "6:30 PM", online: true },
