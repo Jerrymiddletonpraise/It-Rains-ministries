@@ -1,0 +1,42 @@
+// Central place for environment configuration and "is this integration switched on?" checks.
+export const env = {
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+  supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
+  supabaseServiceKey: process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
+  stripeSecret: process.env.STRIPE_SECRET_KEY ?? "",
+  stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET ?? "",
+  paypalClientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID ?? "",
+  paypalSecret: process.env.PAYPAL_CLIENT_SECRET ?? "",
+  paypalEnv: (process.env.PAYPAL_ENV ?? "sandbox") as "sandbox" | "live",
+  resendKey: process.env.RESEND_API_KEY ?? "",
+  emailFrom: process.env.EMAIL_FROM ?? "IT RAINS MINISTRIES <onboarding@resend.dev>",
+  ministryInbox: process.env.MINISTRY_INBOX_EMAIL ?? "",
+  livekitUrl: process.env.NEXT_PUBLIC_LIVEKIT_URL ?? "",
+  livekitKey: process.env.LIVEKIT_API_KEY ?? "",
+  livekitSecret: process.env.LIVEKIT_API_SECRET ?? "",
+  recordingS3: {
+    accessKey: process.env.RECORDING_S3_ACCESS_KEY ?? "",
+    secret: process.env.RECORDING_S3_SECRET ?? "",
+    bucket: process.env.RECORDING_S3_BUCKET ?? "recordings",
+    region: process.env.RECORDING_S3_REGION ?? "us-east-1",
+    endpoint: process.env.RECORDING_S3_ENDPOINT ?? "",
+    publicBaseUrl: process.env.RECORDING_PUBLIC_BASE_URL ?? "",
+  },
+  turnstileSiteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "",
+  turnstileSecret: process.env.TURNSTILE_SECRET_KEY ?? "",
+  gaId: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "",
+  mapsKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY ?? "",
+  vapidPublic: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? "",
+};
+
+export const enabled = {
+  supabase: Boolean(env.supabaseUrl && env.supabaseAnonKey),
+  serviceRole: Boolean(env.supabaseUrl && env.supabaseServiceKey),
+  stripe: Boolean(env.stripeSecret),
+  paypal: Boolean(env.paypalClientId && env.paypalSecret),
+  email: Boolean(env.resendKey),
+  livekit: Boolean(env.livekitUrl && env.livekitKey && env.livekitSecret),
+  recording: Boolean(env.recordingS3.accessKey && env.recordingS3.secret && env.recordingS3.endpoint),
+  turnstile: Boolean(env.turnstileSiteKey && env.turnstileSecret),
+};
