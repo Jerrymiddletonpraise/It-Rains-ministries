@@ -24,7 +24,7 @@ export function AdminNav({ roles, email }: { roles: Role[]; email: string }) {
   return (
     <aside className="bg-navy-950 text-white lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
       <div className="flex items-center justify-between p-5">
-        <Link href="/admin" className="flex items-center gap-3"><LogoMark className="h-9 w-9" /><Wordmark sub="ADMIN" /></Link>
+        <Link href="/admin" className="flex items-center gap-3"><LogoMark className="h-12 w-12" /><Wordmark sub="ADMIN" /></Link>
         <button className="lg:hidden" onClick={() => setOpen(!open)} aria-label="Menu">{open ? <X /> : <Menu />}</button>
       </div>
       <nav className={cn("space-y-1 px-3 pb-6", !open && "hidden lg:block")}>

@@ -17,7 +17,7 @@ export default async function Pastor() {
             {home.pastor_photo_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={home.pastor_photo_url} alt={home.pastor_name} className="aspect-[4/5] w-full object-cover" />
-            ) : <div className="flex aspect-[4/5] items-center justify-center"><LogoMark className="h-32 w-32" /></div>}
+            ) : <div className="flex aspect-[4/5] items-center justify-center"><LogoMark className="h-44 w-44" /></div>}
           </div>
           <div>
             <h2 className="font-serif text-4xl font-bold text-royal-800">A message from the pastor</h2>

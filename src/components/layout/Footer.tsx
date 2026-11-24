@@ -21,7 +21,7 @@ export async function Footer() {
         <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <div className="flex items-center gap-3">
-              <LogoMark className="h-12 w-12" />
+              <LogoMark className="h-16 w-16" />
               <Wordmark />
             </div>
             <p className="mt-5 text-sm leading-relaxed">A global family of worshippers carrying the presence of God to the nations. Where Heaven&apos;s Abundance Rains Upon Lives.</p>

@@ -32,7 +32,7 @@ export default async function Home() {
         )}
         <Rain />
         <div className="relative mx-auto w-full max-w-5xl text-center">
-          <LogoMark className="mx-auto mb-8 h-20 w-20 animate-fade-up drop-shadow-[0_0_30px_rgba(212,175,55,0.45)]" />
+          <LogoMark className="mx-auto mb-6 h-28 w-28 animate-fade-up drop-shadow-[0_0_30px_rgba(212,175,55,0.45)]" />
           <p className="animate-fade-up text-xs font-bold uppercase tracking-[0.4em] text-gold-400 sm:text-sm">Welcome home</p>
           <h1 className="mt-4 animate-fade-up font-serif text-5xl font-bold leading-[1.05] text-white [animation-delay:120ms] sm:text-6xl md:text-7xl lg:text-8xl">
             {home.hero_title.replace("IT RAINS MINISTRIES", "")}
@@ -77,7 +77,7 @@ export default async function Home() {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={home.pastor_photo_url} alt={home.pastor_name} className="h-full w-full object-cover" />
               ) : (
-                <div className="flex h-full items-center justify-center"><LogoMark className="h-32 w-32 opacity-80" /></div>
+                <div className="flex h-full items-center justify-center"><LogoMark className="h-44 w-44 opacity-80" /></div>
               )}
             </div>
           </div>

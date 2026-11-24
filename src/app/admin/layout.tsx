@@ -12,7 +12,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     return (
       <div className="bg-heaven flex min-h-screen items-center justify-center p-4">
         <div className="max-w-md rounded-3xl bg-white p-10 text-center">
-          <LogoMark className="mx-auto h-14 w-14" />
+          <LogoMark className="mx-auto h-20 w-20" />
           <h1 className="mt-4 font-serif text-3xl font-bold">Staff access only</h1>
           <p className="mt-2 text-navy-800/70">Your account ({user.email}) doesn&apos;t have an admin role. Ask a Super Admin to grant you access.</p>
           <ButtonLink href="/account" variant="purple" className="mt-6">Go to my account</ButtonLink>
