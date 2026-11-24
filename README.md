@@ -12,17 +12,19 @@ Nothing is simulated. When a service isn't configured yet, the site says so plai
 
 ## What you need to provide (setup checklist)
 
-| # | Account | Used for | Cost to start | Variables |
-|---|---------|----------|---------------|-----------|
-| 1 | **Supabase** (supabase.com) | Database, member login, live chat, file uploads | Free tier | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` |
-| 2 | **Vercel** (vercel.com) | Hosting, HTTPS, custom domain | Free tier (Pro recommended for a ministry org) | — |
-| 3 | **LiveKit Cloud** (cloud.livekit.io) | Live streaming from browser & OBS, recording | Free tier, then usage-based | `NEXT_PUBLIC_LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET` |
-| 4 | **Stripe** (stripe.com) | Card, Apple Pay, Google Pay, monthly giving, receipts | Per-transaction fees (ask about nonprofit rates) | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` |
-| 5 | **PayPal Business** (developer.paypal.com) | One-time PayPal gifts | Per-transaction fees | `NEXT_PUBLIC_PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_ENV` |
-| 6 | **Resend** (resend.com) + your domain | Confirmations, receipts, newsletters | Free tier (3,000 emails/month) | `RESEND_API_KEY`, `EMAIL_FROM`, `MINISTRY_INBOX_EMAIL` |
-| 7 | **Supabase S3 keys** (same project) | Saving recordings of live services | Included in Supabase storage | `RECORDING_S3_*` |
-| 8 | VAPID keys (generated, no account) | "Notify me when we go live" | Free | `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` |
-| 9 | *Optional:* Cloudflare Turnstile, Google Analytics 4, Google Maps Embed key | Extra spam protection, analytics, maps | Free | see `.env.example` |
+All services below are **free**. The only unavoidable cost is the per-gift processing fee charged by Stripe/PayPal (no monthly fee; ask both about nonprofit rates).
+
+| # | Account | Used for | Free plan notes | Variables |
+|---|---------|----------|-----------------|-----------|
+| 1 | **Supabase** (supabase.com) | Database, member login, live chat, file uploads | Free plan; projects pause after ~1 week with no activity (restore from the dashboard) | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` |
+| 2 | **Netlify or Vercel** | Hosting, HTTPS, custom domain | Free plan | — |
+| 3 | **YouTube** channel | Live streaming & automatic recordings (embedded on /watch) | Free; phone-app streaming needs 50 subscribers, webcam/OBS do not | none (paste the live link in Admin → Live) |
+| 4 | **Stripe** (stripe.com) | Card, Apple Pay, Google Pay, monthly giving | No monthly fee; small fee per gift | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` |
+| 5 | **PayPal Business** | One-time PayPal gifts | No monthly fee; small fee per gift | `NEXT_PUBLIC_PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_ENV` |
+| 6 | **Resend** (resend.com) | Confirmations, receipts, newsletters | Free up to 3,000 emails/month (100/day) | `RESEND_API_KEY`, `EMAIL_FROM`, `MINISTRY_INBOX_EMAIL` |
+| 7 | VAPID keys (generated, no account) | "Notify me when we go live" | Free | `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` |
+| 8 | *Optional:* Cloudflare Turnstile, Google Analytics 4 | Extra spam protection, analytics | Free | see `.env.example` |
+| — | *Optional, not required:* LiveKit Cloud + `RECORDING_S3_*` | Streaming straight to the site from a browser/OBS without YouTube | Usage-based beyond its free allowance | `LIVEKIT_*` |
 
 Also needed from the ministry: **logo files (if you have an existing one), photos of the pastor, church and services, the church address, phone/WhatsApp, email, social media links, service times, and the pastor's biography.** All of these are edited in **Admin → Website content**; no code changes needed.
 
@@ -58,6 +60,9 @@ Sign in and open **/admin**. From **Members & roles** you can grant Pastor, Medi
 - Gifts are recorded **only** after Stripe (signed webhook / server verification) or PayPal (server-side capture) confirms them. Card details never touch this server.
 
 ### 5. Live streaming
+**Default (free): YouTube Live.** In YouTube Studio click *Create → Go live* (webcam or OBS), copy the share link, then in **Admin → Live broadcasts** create a broadcast with source *YouTube Live* and paste it. Viewers on /watch get the video plus the site's chat, private prayer requests, greetings, live viewer count and sharing; the page switches to live automatically. YouTube saves the recording; add it to the media library as a replay by pasting the same link.
+
+**Optional: streaming directly to the site (LiveKit).**
 1. Create a LiveKit Cloud project and copy the URL, key and secret.
 2. In LiveKit → Settings → Webhooks, add `https://YOUR-DOMAIN/api/webhooks/livekit`.
 3. For recordings: Supabase → Storage → S3 Connection → create access keys, fill in `RECORDING_S3_*`.

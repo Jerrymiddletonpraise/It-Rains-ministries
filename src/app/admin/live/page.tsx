@@ -13,7 +13,7 @@ export default async function LiveAdmin() {
   return (
     <>
       <AdminHeader title="Live broadcasts" intro="Go live from a phone or laptop browser, OBS / RTMP encoders, or YouTube Live." />
-      {!enabled.livekit && <div className="mb-6"><Notice kind="warn">LiveKit is not configured yet. Browser and OBS streaming need LIVEKIT_API_KEY, LIVEKIT_API_SECRET and NEXT_PUBLIC_LIVEKIT_URL. YouTube embeds work now.</Notice></div>}
+      {!enabled.livekit && <div className="mb-6"><Notice>Broadcasts use YouTube Live (free). The website shows the stream with its own chat, prayer requests and viewer count. Streaming straight to the site from a browser or OBS is optional and needs a LiveKit account.</Notice></div>}
       <div className="grid gap-8 xl:grid-cols-[1fr_380px]">
         <div className="overflow-x-auto rounded-2xl bg-white shadow-sm">
           {streams?.length ? (

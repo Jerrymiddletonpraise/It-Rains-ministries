@@ -5,7 +5,7 @@ import { Notice, inputCls } from "@/components/ui";
 
 export function NewStreamForm() {
   const [state, action, pending] = useActionState(createStream, null);
-  const [source, setSource] = useState("browser");
+  const [source, setSource] = useState(process.env.NEXT_PUBLIC_LIVEKIT_URL ? "browser" : "youtube");
   const [when, setWhen] = useState("");
   return (
     <form action={action} className="space-y-4">
@@ -13,12 +13,17 @@ export function NewStreamForm() {
       <label className="block text-sm font-medium">Description<textarea name="description" rows={2} className={inputCls} /></label>
       <label className="block text-sm font-medium">Broadcast from
         <select name="source" value={source} onChange={(e) => setSource(e.target.value)} className={inputCls}>
-          <option value="browser">Phone / laptop camera (browser)</option>
-          <option value="rtmp">OBS, vMix or hardware encoder (RTMP)</option>
-          <option value="youtube">YouTube Live (embed)</option>
+          <option value="youtube">YouTube Live (free, recommended)</option>
+          <option value="browser">Phone / laptop camera in this browser (needs LiveKit)</option>
+          <option value="rtmp">OBS straight to this site (needs LiveKit)</option>
         </select>
       </label>
-      {source === "youtube" && <label className="block text-sm font-medium">YouTube live URL<input name="youtube_url" type="url" required className={inputCls} placeholder="https://www.youtube.com/live/…" /></label>}
+      {source === "youtube" && (
+        <>
+          <label className="block text-sm font-medium">YouTube live URL<input name="youtube_url" type="url" required className={inputCls} placeholder="https://www.youtube.com/live/…" /></label>
+          <p className="text-xs text-navy-800/60">In YouTube Studio click Create → Go live, choose Webcam or Streaming software (OBS), then copy the share link here. YouTube records the service automatically.</p>
+        </>
+      )}
       <label className="block text-sm font-medium">Scheduled for (optional)
         <input type="datetime-local" value={when} onChange={(e) => setWhen(e.target.value)} className={inputCls} />
         <input type="hidden" name="scheduled_for__iso" value={when ? new Date(when).toISOString() : ""} />
