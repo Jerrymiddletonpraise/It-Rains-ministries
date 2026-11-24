@@ -56,7 +56,7 @@ export default async function Watch() {
       <Section className="bg-ivory">
         <Heading eyebrow="Replays" title="Previous broadcasts" />
         {replays.length ? <div className="grid gap-6 md:grid-cols-3">{replays.map((m) => <SermonCard key={m.id} m={m} />)}</div>
-          : <Empty title="Replays will appear here">Every live service is recorded and saved automatically.</Empty>}
+          : <Empty title="Replays will appear here">Recordings of past services are added to the media library after each broadcast.</Empty>}
         <Card className="mt-10 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
           <p className="font-serif text-xl">Looking for a particular message?</p>
           <ButtonLink href="/sermons" variant="purple">Search the media library</ButtonLink>
