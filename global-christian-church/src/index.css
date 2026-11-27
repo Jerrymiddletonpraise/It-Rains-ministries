@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* GCC design tokens: black, deep charcoal, champagne gold, ivory. */
+@layer base {
+  :root {
+    --ink: 240 5% 4%;
+    --ink-soft: 240 4% 7%;
+    --charcoal: 240 4% 10%;
+    --charcoal-light: 240 3% 15%;
+    --gold: 39 47% 66%;
+    --gold-light: 41 58% 80%;
+    --gold-deep: 36 38% 48%;
+    --ivory: 42 50% 95%;
+    --ivory-muted: 40 12% 70%;
+    --line: 39 30% 60% / 0.16;
+    --danger: 0 70% 60%;
+    --live: 0 78% 56%;
+  }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    @apply bg-ink text-ivory font-sans antialiased;
+    font-feature-settings: "ss01", "cv11";
+    font-variant-numeric: lining-nums;
+  }
+  h1, h2, h3, h4 { @apply font-display font-medium tracking-tight text-ivory; }
+  ::selection { background: hsl(var(--gold) / 0.35); color: hsl(var(--ivory)); }
+  :focus-visible { outline: 2px solid hsl(var(--gold)); outline-offset: 3px; border-radius: 4px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  }
+}
+
+@layer components {
+  .eyebrow { @apply text-[0.7rem] font-semibold uppercase tracking-luxe text-gold; }
+  .gold-text {
+    background: linear-gradient(100deg, hsl(var(--gold-light)), hsl(var(--gold)) 45%, hsl(var(--gold-deep)));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .gold-rule { @apply h-px w-16 bg-gradient-to-r from-transparent via-gold to-transparent; }
+  .glass { @apply bg-charcoal/70 backdrop-blur-xl border border-line; }
+  .card-luxe {
+    @apply relative overflow-hidden rounded-2xl border border-line bg-gradient-to-b from-charcoal-light/60 to-charcoal/80 shadow-luxe transition duration-500;
+  }
+  .card-luxe:hover { @apply border-gold/40 -translate-y-1; }
+  .grain::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .06; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .prose-luxe { @apply text-ivory-muted leading-relaxed; }
+  .prose-luxe h2 { @apply mt-10 mb-3 text-3xl text-ivory; }
+  .prose-luxe h3 { @apply mt-6 mb-2 text-2xl text-ivory; }
+  .prose-luxe p { @apply mb-4; }
+  .prose-luxe ul { @apply mb-4 list-disc space-y-1 pl-6; }
+  .prose-luxe a { @apply text-gold underline underline-offset-4; }
+}
