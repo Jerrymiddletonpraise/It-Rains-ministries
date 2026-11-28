@@ -1,5 +1,5 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { BarChart3, Bell, BookOpen, CalendarDays, ClipboardList, Film, Gauge, HandCoins, HandHeart, HeartHandshake, KeyRound, LayoutTemplate, Plug, Radio, Settings, ShieldCheck, UserPlus, Users } from "lucide-react";
+import { BarChart3, Bell, BookOpen, CalendarDays, ClipboardList, Film, Inbox, Gauge, HandCoins, HandHeart, HeartHandshake, KeyRound, LayoutTemplate, Plug, Radio, Settings, ShieldCheck, UserPlus, Users } from "lucide-react";
 import { useAuth } from "@/auth/AuthProvider";
 import { SECTION_ACCESS, hasAnyRole } from "@/auth/roles";
 import { useSeo } from "@/lib/seo";
@@ -9,16 +9,17 @@ import { ButtonLink } from "@/components/ui/Button";
 
 export const SECTIONS = [
   { id: "overview", label: "Overview", Icon: Gauge, path: "" },
+  { id: "inbox", label: "Inbox", Icon: Inbox, path: "inbox" },
   { id: "content", label: "Website content", Icon: LayoutTemplate, path: "content", phase: 6 },
   { id: "members", label: "Members", Icon: Users, path: "members", phase: 6 },
   { id: "visitors", label: "Visitors", Icon: UserPlus, path: "visitors", phase: 6 },
   { id: "ministries", label: "Ministries", Icon: HeartHandshake, path: "ministries", phase: 9 },
-  { id: "events", label: "Events", Icon: CalendarDays, path: "events", phase: 9 },
-  { id: "sermons", label: "Sermons", Icon: BookOpen, path: "sermons", phase: 11 },
+  { id: "events", label: "Events", Icon: CalendarDays, path: "events" },
+  { id: "sermons", label: "Sermons", Icon: BookOpen, path: "sermons" },
   { id: "media", label: "Media", Icon: Film, path: "media", phase: 11 },
-  { id: "streaming", label: "Live streaming", Icon: Radio, path: "streaming", phase: 7 },
+  { id: "streaming", label: "Live streaming", Icon: Radio, path: "streaming" },
   { id: "giving", label: "Giving", Icon: HandCoins, path: "giving", phase: 8 },
-  { id: "prayer", label: "Prayer requests", Icon: HandHeart, path: "prayer", phase: 10 },
+  { id: "prayer", label: "Prayer requests", Icon: HandHeart, path: "prayer" },
   { id: "volunteers", label: "Volunteers", Icon: ClipboardList, path: "volunteers", phase: 9 },
   { id: "notifications", label: "Notifications", Icon: Bell, path: "notifications", phase: 12 },
   { id: "reports", label: "Reports", Icon: BarChart3, path: "reports", phase: 13 },

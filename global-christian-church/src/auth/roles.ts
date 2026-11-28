@@ -19,6 +19,7 @@ const PASTORAL: AppRole[] = ["super_admin", "church_admin", "senior_pastor", "pa
 /** Who may manage each Control Center area. Mirrors the RLS policies; the database is the real gate. */
 export const SECTION_ACCESS: Record<string, AppRole[]> = {
   overview: STAFF_ROLES,
+  inbox: PASTORAL,
   content: [...ADMIN, "senior_pastor"],
   members: PASTORAL,
   visitors: PASTORAL,

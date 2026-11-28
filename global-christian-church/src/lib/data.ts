@@ -4,7 +4,7 @@ import { beginning, FOUNDER_NAME, founderIntro, founderStory, missionPoints, mis
 
 export interface CollectionResult<T> { data: T[]; isDemo: boolean; loading: boolean; error: string | null; }
 
-interface Query { order?: string; ascending?: boolean; limit?: number; eq?: Record<string, string | number | boolean>; gte?: Record<string, string>; }
+interface Query { refresh?: number; order?: string; ascending?: boolean; limit?: number; eq?: Record<string, string | number | boolean>; gte?: Record<string, string>; }
 
 /**
  * Reads a published collection from Supabase. Falls back to labelled demo content when
@@ -45,10 +45,11 @@ export interface RichText { title?: string; body: string | null; }
 export interface MissionVision { mission: string | null; vision: string | null; values: string[]; }
 export interface Beliefs { intro: string | null; items: { title: string; body: string }[]; }
 export interface ServiceTime { label: string; day: string; time: string; }
+export interface StreamingSettings { youtube_channel_id: string | null; facebook_page_url: string | null; auto_play_channel: boolean; }
 
 export interface SiteSettings {
   church_profile: ChurchProfile; senior_pastor: SeniorPastor; social: SocialLinks; hero: HeroSettings;
-  welcome: RichText; about: RichText; mission_vision: MissionVision; beliefs: Beliefs; service_times: ServiceTime[];
+  welcome: RichText; about: RichText; mission_vision: MissionVision; beliefs: Beliefs; service_times: ServiceTime[]; streaming: StreamingSettings;
 }
 
 export const defaultSettings: SiteSettings = {
@@ -61,6 +62,7 @@ export const defaultSettings: SiteSettings = {
   mission_vision: { mission: missionStatement, vision: visionStatement, values: missionPoints.map((m) => m.title) },
   beliefs: { intro: null, items: [] },
   service_times: [],
+  streaming: { youtube_channel_id: null, facebook_page_url: null, auto_play_channel: true },
 };
 
 let cache: Promise<Partial<SiteSettings>> | null = null;

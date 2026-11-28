@@ -22,6 +22,6 @@ export interface Resource { id: string; title: string; description: string | nul
 export interface Faq { id: string; question: string; answer: string; category: string | null; sort_order: number; }
 export interface Broadcast {
   id: string; title: string; description: string | null; scheduled_start: string; scheduled_end: string | null;
-  status: "scheduled" | "live" | "ended" | "cancelled"; embed_url: string | null; scripture_reference: string | null; scripture_text: string | null;
+  status: "scheduled" | "live" | "ended" | "cancelled"; embed_url: string | null; scripture_reference: string | null; scripture_text: string | null; chat_enabled?: boolean;
 }
 export interface GivingCampaign { id: string; slug: string; title: string; description: string | null; goal_amount_cents: number | null; category: string; image_url: string | null; ends_on: string | null; }

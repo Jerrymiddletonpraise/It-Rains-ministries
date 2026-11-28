@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { HandHeart } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { useSeo } from "@/lib/seo";
 import { useCollection } from "@/lib/data";
 import { formatDate } from "@/lib/utils";
@@ -38,9 +40,29 @@ export default function Prayer() {
       <Section>
         <SectionHeading eyebrow="Stand together" title="Prayer wall" />
         {wall.data.length ? (
-          <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">{wall.data.map((w) => <li key={w.id} className="card-luxe p-6"><p className="eyebrow text-[0.6rem]">{w.category} · {formatDate(w.created_at)}</p><p className="mt-3 text-ivory-muted">{w.request}</p><p className="mt-4 text-xs text-gold-light">{w.display_name}</p></li>)}</ul>
+          <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">{wall.data.map((w) => <li key={w.id} className="card-luxe p-6"><p className="eyebrow text-[0.6rem]">{w.category} · {formatDate(w.created_at)}</p><p className="mt-3 text-ivory-muted">{w.request}</p><div className="mt-4 flex items-center justify-between gap-3"><p className="text-xs text-gold-light">{w.display_name}</p><PrayedButton id={w.id} count={w.prayer_count} /></div></li>)}</ul>
         ) : <p className="text-center text-ivory-muted">Approved public prayer requests will appear here.</p>}
       </Section>
     </>
+  );
+}
+
+/** "I prayed": anyone can add one prayer per request per visit; the count is kept by the database. */
+function PrayedButton({ id, count }: { id: string; count: number }) {
+  const key = `gcc-prayed-${id}`;
+  const [n, setN] = useState(count);
+  const [done, setDone] = useState(() => { try { return localStorage.getItem(key) === "1"; } catch { return false; } });
+  async function pray() {
+    if (done || !supabase) return;
+    setDone(true); setN((x) => x + 1);
+    const { data } = await supabase.rpc("pray_for", { request_id: id });
+    if (typeof data === "number") setN(data);
+    try { localStorage.setItem(key, "1"); } catch { /* private mode */ }
+  }
+  return (
+    <button type="button" onClick={pray} disabled={done} aria-pressed={done}
+      className="inline-flex items-center gap-1.5 rounded-full border border-gold/40 px-3 py-1.5 text-xs text-gold-light transition hover:bg-gold/10 disabled:cursor-default disabled:opacity-80">
+      <HandHeart className="h-3.5 w-3.5" aria-hidden />{done ? "You prayed" : "I prayed"}{n > 0 && <span className="opacity-70">· {n}</span>}
+    </button>
   );
 }

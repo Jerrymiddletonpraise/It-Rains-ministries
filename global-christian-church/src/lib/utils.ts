@@ -24,7 +24,7 @@ export function toEmbedUrl(raw?: string | null): string | null {
     const u = new URL(raw);
     if (u.hostname.includes("youtube.com") || u.hostname === "youtu.be") {
       if (u.pathname.startsWith("/embed/")) return raw;
-      const id = u.hostname === "youtu.be" ? u.pathname.slice(1) : u.searchParams.get("v") ?? u.pathname.split("/live/")[1];
+      const id = u.hostname === "youtu.be" ? u.pathname.slice(1) : u.searchParams.get("v") ?? u.pathname.match(/\/(?:live|shorts)\/([\w-]{6,})/)?.[1];
       return id ? `https://www.youtube-nocookie.com/embed/${id}?rel=0` : null;
     }
     if (u.hostname.includes("facebook.com")) {
@@ -33,4 +33,10 @@ export function toEmbedUrl(raw?: string | null): string | null {
     if (u.hostname.includes("player.restream.io") || u.hostname.includes("player.vimeo.com") || u.hostname.includes("player.twitch.tv")) return raw;
     return null;
   } catch { return null; }
+}
+
+/** YouTube's free "whatever this channel is streaming now" player. Shows the live service automatically. */
+export function channelLiveEmbed(channelId?: string | null): string | null {
+  const id = channelId?.trim();
+  return id && /^UC[\w-]{22}$/.test(id) ? `https://www.youtube.com/embed/live_stream?channel=${id}&autoplay=1&rel=0` : null;
 }
