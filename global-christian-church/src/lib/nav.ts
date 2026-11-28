@@ -4,14 +4,15 @@ export interface NavGroup { label: string; items: NavItem[]; }
 export const navGroups: NavGroup[] = [
   { label: "About", items: [
     { label: "About GCC", to: "/about", description: "Who we are" },
+    { label: "About the Pastor", to: "/about-the-pastor", description: "The story of CHIEFPRO DON" },
     { label: "Vision and Mission", to: "/vision-mission", description: "Why we exist" },
     { label: "What We Believe", to: "/beliefs", description: "Our statement of faith" },
     { label: "Leadership", to: "/leadership", description: "Our pastors and leaders" },
     { label: "FAQ", to: "/faq", description: "Common questions" },
   ] },
   { label: "Watch", items: [
-    { label: "GCC Worldwide Live", to: "/watch", description: "Join the live broadcast" },
-    { label: "Sermon Library", to: "/sermons", description: "Messages on demand" },
+    { label: "GCC Worldwide Live", to: "/watch", description: "Watch live, always free" },
+    { label: "Sermon Library", to: "/sermons", description: "Every message, free" },
     { label: "Podcasts", to: "/podcasts", description: "Listen anywhere" },
   ] },
   { label: "Connect", items: [

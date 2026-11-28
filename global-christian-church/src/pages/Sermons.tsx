@@ -36,7 +36,7 @@ export default function Sermons() {
   useSeo("Sermon Library", "Watch and listen to sermons, Bible teachings, worship and conference recordings from Global Christian Church.");
   return (
     <>
-      <PageHero eyebrow="Media" title="Sermon Library" intro="Video and audio sermons, Bible teachings, worship and conference recordings." />
+      <PageHero eyebrow="Media" title="Sermon Library" intro="Every message, free to watch and listen to, as often as you like. Video and audio sermons, Bible teachings, worship and conference recordings." />
       <Section><MediaBrowser kinds={KINDS} demo={demoSermons} /></Section>
     </>
   );

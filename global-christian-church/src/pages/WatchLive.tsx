@@ -10,11 +10,12 @@ import { AwaitingBadge, DemoBadge, Section, SectionHeading } from "@/components/
 import { Countdown, SermonCard } from "@/components/Cards";
 import { SocialLinks } from "@/components/layout/Footer";
 import { LogoMark } from "@/components/layout/Logo";
+import { FreePromise } from "@/components/Founder";
 
 const since = () => new Date(Date.now() - 6 * 3600_000).toISOString();
 
 export default function WatchLive() {
-  useSeo("GCC Worldwide Live", "Watch Global Christian Church live from anywhere in the world.");
+  useSeo("GCC Worldwide Live", "Watch Global Christian Church live, completely free, from anywhere in the world. No membership, subscription, paywall or credit card.");
   const { settings: s } = useSettings();
   const schedule = useCollection<Broadcast>("broadcast_schedules", [demoBroadcast], { gte: { scheduled_start: since() }, order: "scheduled_start", ascending: true, limit: 6 });
   const recordings = useCollection<Sermon>("sermons", demoSermons.slice(0, 3), { eq: { status: "published" }, order: "preached_on", limit: 3 });
@@ -40,6 +41,7 @@ export default function WatchLive() {
             <div className="flex items-center gap-3">
               <LogoMark className="h-9 w-9" />
               <h1 className="font-display text-3xl tracking-[0.12em] sm:text-4xl">GCC <span className="gold-text">WORLDWIDE</span> LIVE</h1>
+              <span className="rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-gold-light">Free</span>
             </div>
             {live ? (
               <span className="inline-flex items-center gap-2 rounded-full bg-live px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-white"><span className="h-2 w-2 animate-live rounded-full bg-white" />Live now</span>
@@ -56,7 +58,7 @@ export default function WatchLive() {
                     <LogoMark className="h-16 w-16 opacity-80" />
                     <p className="mt-6 font-display text-2xl sm:text-3xl">{current ? "The next broadcast begins in" : "No broadcast is scheduled"}</p>
                     {current && <Countdown target={current.scheduled_start} className="mt-6" />}
-                    <p className="mt-6 max-w-md text-xs text-ivory-muted">The player switches on here when the media team marks a broadcast live. Nothing plays until a real stream exists.</p>
+                    <p className="mt-6 max-w-md text-xs text-ivory-muted">When we go live, the broadcast plays right here, free. No account, no payment and nothing to install.</p>
                   </div>
                 )}
               </div>
@@ -94,6 +96,7 @@ export default function WatchLive() {
       </section>
 
       <Section>
+        <FreePromise className="mx-auto mb-16 max-w-3xl">God’s love is free, and access to worship should never be restricted by anyone’s ability to pay. Watch live services, recorded sermons, worship sessions and teachings from any country, on any phone, tablet, laptop or computer, with no membership, subscription, paywall or credit card.</FreePromise>
         <SectionHeading eyebrow="Schedule" title="Upcoming broadcasts" />
         <ul className="mx-auto grid max-w-3xl gap-3">
           {upcoming.length ? upcoming.map((b) => (

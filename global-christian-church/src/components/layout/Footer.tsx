@@ -61,7 +61,7 @@ export function Footer() {
       </div>
       <div className="border-t border-line">
         <div className="container flex flex-col items-center justify-between gap-4 py-6 text-xs text-ivory-muted sm:flex-row">
-          <p>© {year} Global Christian Church. All rights reserved.</p>
+          <p>© {year} Global Christian Church. God’s love is free: every service is free to watch.</p>
           <ul className="flex gap-6">{footerLegal.map((l) => <li key={l.to}><Link to={l.to} className="hover:text-ivory">{l.label}</Link></li>)}<li><Link to="/login" className="hover:text-ivory">Member Sign In</Link></li></ul>
         </div>
       </div>

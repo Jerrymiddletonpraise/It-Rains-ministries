@@ -11,6 +11,7 @@ const About = p(() => import("@/pages/About"));
 const VisionMission = p(() => import("@/pages/VisionMission"));
 const Beliefs = p(() => import("@/pages/Beliefs"));
 const Leadership = p(() => import("@/pages/Leadership"));
+const AboutPastor = p(() => import("@/pages/AboutPastor"));
 const WatchLive = p(() => import("@/pages/WatchLive"));
 const Sermons = p(() => import("@/pages/Sermons"));
 const SermonDetail = p(() => import("@/pages/SermonDetail"));
@@ -53,6 +54,7 @@ export default function App() {
           <Route path="vision-mission" element={<VisionMission />} />
           <Route path="beliefs" element={<Beliefs />} />
           <Route path="leadership" element={<Leadership />} />
+          <Route path="about-the-pastor" element={<AboutPastor />} />
           <Route path="watch" element={<WatchLive />} />
           <Route path="sermons" element={<Sermons />} />
           <Route path="sermons/:slug" element={<SermonDetail />} />
