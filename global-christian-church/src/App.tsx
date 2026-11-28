@@ -11,6 +11,7 @@ const About = p(() => import("@/pages/About"));
 const VisionMission = p(() => import("@/pages/VisionMission"));
 const Beliefs = p(() => import("@/pages/Beliefs"));
 const Leadership = p(() => import("@/pages/Leadership"));
+const AboutPastor = p(() => import("@/pages/AboutPastor"));
 const WatchLive = p(() => import("@/pages/WatchLive"));
 const Sermons = p(() => import("@/pages/Sermons"));
 const SermonDetail = p(() => import("@/pages/SermonDetail"));
@@ -42,6 +43,11 @@ const SettingsEditor = p(() => import("@/pages/admin/SettingsEditor"));
 const RolesManager = p(() => import("@/pages/admin/RolesManager"));
 const AuditLog = p(() => import("@/pages/admin/AuditLog"));
 const Planned = p(() => import("@/pages/admin/Planned"));
+const Streaming = p(() => import("@/pages/admin/Streaming"));
+const SermonsAdmin = p(() => import("@/pages/admin/SermonsAdmin"));
+const PrayerAdmin = p(() => import("@/pages/admin/PrayerAdmin"));
+const Inbox = p(() => import("@/pages/admin/Inbox"));
+const EventsAdmin = p(() => import("@/pages/admin/EventsAdmin"));
 
 export default function App() {
   return (
@@ -53,6 +59,7 @@ export default function App() {
           <Route path="vision-mission" element={<VisionMission />} />
           <Route path="beliefs" element={<Beliefs />} />
           <Route path="leadership" element={<Leadership />} />
+          <Route path="about-the-pastor" element={<AboutPastor />} />
           <Route path="watch" element={<WatchLive />} />
           <Route path="sermons" element={<Sermons />} />
           <Route path="sermons/:slug" element={<SermonDetail />} />
@@ -84,6 +91,11 @@ export default function App() {
           <Route path="settings" element={<RequireAuth roles={SECTION_ACCESS.settings}><SettingsEditor /></RequireAuth>} />
           <Route path="roles" element={<RequireAuth roles={SECTION_ACCESS.roles}><RolesManager /></RequireAuth>} />
           <Route path="audit" element={<RequireAuth roles={SECTION_ACCESS.audit}><AuditLog /></RequireAuth>} />
+          <Route path="streaming" element={<RequireAuth roles={SECTION_ACCESS.streaming}><Streaming /></RequireAuth>} />
+          <Route path="sermons" element={<RequireAuth roles={SECTION_ACCESS.sermons}><SermonsAdmin /></RequireAuth>} />
+          <Route path="prayer" element={<RequireAuth roles={SECTION_ACCESS.prayer}><PrayerAdmin /></RequireAuth>} />
+          <Route path="inbox" element={<RequireAuth roles={SECTION_ACCESS.inbox}><Inbox /></RequireAuth>} />
+          <Route path="events" element={<RequireAuth roles={SECTION_ACCESS.events}><EventsAdmin /></RequireAuth>} />
           <Route path=":section" element={<Planned />} />
         </Route>
       </Routes>

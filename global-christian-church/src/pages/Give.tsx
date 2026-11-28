@@ -9,6 +9,7 @@ import { PageHero } from "@/components/ui/PageHero";
 import { AwaitingBadge, DemoBadge, Notice, Section, SectionHeading } from "@/components/ui/Misc";
 import { Button } from "@/components/ui/Button";
 import { Field, Input } from "@/components/ui/Form";
+import { FreePromise } from "@/components/Founder";
 
 export const GIVING_CATEGORIES = [
   { id: "tithe", label: "Tithes" }, { id: "offering", label: "General offerings" }, { id: "missions", label: "Missions" },
@@ -25,8 +26,9 @@ export default function Give() {
 
   return (
     <>
-      <PageHero eyebrow="Generosity" title="Online Giving" intro="Partner with Global Christian Church as we reach the world with the gospel." />
+      <PageHero eyebrow="Give / Support · Optional" title="Give freely, only if you choose to" intro="An optional way for those who voluntarily want to support the ministry. Donations are never required to watch services." />
       <Section>
+        <FreePromise className="mb-12" />
         <div className="grid gap-12 lg:grid-cols-5">
           <div className="card-luxe p-6 sm:p-10 lg:col-span-3 lg:hover:translate-y-0">
             <div className="mb-8 flex flex-wrap items-center justify-between gap-3"><h2 className="text-3xl">Make a gift</h2><AwaitingBadge label="Payments awaiting configuration" /></div>

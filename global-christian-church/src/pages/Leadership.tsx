@@ -6,6 +6,7 @@ import type { Leader } from "@/lib/types";
 import { PageHero } from "@/components/ui/PageHero";
 import { AwaitingBadge, DemoBadge, Reveal, Section, SectionHeading } from "@/components/ui/Misc";
 import { PersonPhoto } from "@/components/Cards";
+import { ButtonLink } from "@/components/ui/Button";
 
 export default function Leadership() {
   useSeo("Leadership", "Meet the Senior Pastor and leadership team of Global Christian Church.");
@@ -24,6 +25,7 @@ export default function Leadership() {
             {p.bio ? <p className="mt-6 whitespace-pre-line text-lg leading-relaxed text-ivory-muted">{p.bio}</p> : (
               <><AwaitingBadge className="mt-6" label="Awaiting official information" /><p className="mt-4 text-ivory-muted">The Senior Pastor’s profile is edited from the GCC Control Center under Website settings.</p></>
             )}
+            <ButtonLink to="/about-the-pastor" variant="outline" className="mt-8 mr-4">Read his full story</ButtonLink>
             {p.email && <a href={`mailto:${p.email}`} className="mt-6 inline-flex items-center gap-2 text-gold hover:underline"><Mail className="h-4 w-4" aria-hidden />{p.email}</a>}
           </Reveal>
         </div>

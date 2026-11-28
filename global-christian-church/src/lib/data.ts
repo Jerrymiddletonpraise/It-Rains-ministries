@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { beginning, FOUNDER_NAME, founderIntro, founderStory, missionPoints, missionStatement, visionStatement } from "@/lib/founder";
 
 export interface CollectionResult<T> { data: T[]; isDemo: boolean; loading: boolean; error: string | null; }
 
-interface Query { order?: string; ascending?: boolean; limit?: number; eq?: Record<string, string | number | boolean>; gte?: Record<string, string>; }
+interface Query { refresh?: number; order?: string; ascending?: boolean; limit?: number; eq?: Record<string, string | number | boolean>; gte?: Record<string, string>; }
 
 /**
  * Reads a published collection from Supabase. Falls back to labelled demo content when
@@ -44,22 +45,24 @@ export interface RichText { title?: string; body: string | null; }
 export interface MissionVision { mission: string | null; vision: string | null; values: string[]; }
 export interface Beliefs { intro: string | null; items: { title: string; body: string }[]; }
 export interface ServiceTime { label: string; day: string; time: string; }
+export interface StreamingSettings { youtube_channel_id: string | null; facebook_page_url: string | null; auto_play_channel: boolean; }
 
 export interface SiteSettings {
   church_profile: ChurchProfile; senior_pastor: SeniorPastor; social: SocialLinks; hero: HeroSettings;
-  welcome: RichText; about: RichText; mission_vision: MissionVision; beliefs: Beliefs; service_times: ServiceTime[];
+  welcome: RichText; about: RichText; mission_vision: MissionVision; beliefs: Beliefs; service_times: ServiceTime[]; streaming: StreamingSettings;
 }
 
 export const defaultSettings: SiteSettings = {
   church_profile: { name: "Global Christian Church", tagline: "One Faith. One Family. Reaching the World.", address: null, phone: null, email: null, whatsapp: null, timezone: null },
-  senior_pastor: { name: null, title: "Senior Pastor", bio: null, photo_url: null, email: null },
+  senior_pastor: { name: FOUNDER_NAME, title: "Founder and Senior Pastor", bio: [founderIntro, ...founderStory].join("\n\n"), photo_url: null, email: null },
   social: { youtube: null, facebook: null, instagram: null, tiktok: null, twitch: null, x: null },
-  hero: { headline: "One Faith. One Family. Reaching the World.", subheadline: "Worship with Global Christian Church in person or online, wherever you are in the world.", image_url: null, video_url: null },
-  welcome: { title: "Welcome home", body: null },
-  about: { title: "About Global Christian Church", body: null },
-  mission_vision: { mission: null, vision: null, values: [] },
+  hero: { headline: "One Faith. One Family. Reaching the World.", subheadline: "A spiritual home for healing, restoration and the awakening of humanity. Every service is free to watch, from anywhere in the world.", image_url: null, video_url: null },
+  welcome: { title: "Welcome home", body: "Nobody should be forgotten. Nobody should be abandoned. And nobody should feel that their past determines their future. Whoever you are, wherever you are from, there is a place for you here." },
+  about: { title: "About Global Christian Church", body: beginning.join("\n\n") },
+  mission_vision: { mission: missionStatement, vision: visionStatement, values: missionPoints.map((m) => m.title) },
   beliefs: { intro: null, items: [] },
   service_times: [],
+  streaming: { youtube_channel_id: null, facebook_page_url: null, auto_play_channel: true },
 };
 
 let cache: Promise<Partial<SiteSettings>> | null = null;
@@ -81,7 +84,9 @@ export function useSettings() {
       const merged = { ...defaultSettings } as Record<string, unknown>;
       for (const [k, v] of Object.entries(s)) {
         const base = (defaultSettings as unknown as Record<string, unknown>)[k];
-        merged[k] = Array.isArray(base) ? v : { ...(base as object), ...(v as object) };
+        // Empty fields saved in the Control Center fall back to the church's official defaults.
+        const filled = v && typeof v === "object" && !Array.isArray(v) ? Object.fromEntries(Object.entries(v).filter(([, x]) => x !== null && x !== "")) : v;
+        merged[k] = Array.isArray(base) ? (Array.isArray(v) && v.length ? v : base) : { ...(base as object), ...(filled as object) };
       }
       setSettings(merged as unknown as SiteSettings); setLoaded(true);
     });

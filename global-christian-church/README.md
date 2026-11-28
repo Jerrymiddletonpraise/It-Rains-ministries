@@ -16,6 +16,10 @@ A full-stack church website, member portal and administration platform for Globa
 | 4 | Supabase database, 42 tables, Row Level Security on every table | Done, 47 automated security checks pass |
 | 5 | Authentication and role permissions (10 roles) | Done |
 | 6 | Member portal (saved sermons, giving history, notifications, content editing) | Next |
+| 7a | Free live watching: YouTube/Facebook player, auto-play of the YouTube channel, broadcast scheduling and Go live, real-time moderated live chat | Done |
+| 9a | Events management (Control Center) | Done |
+| 10a | Prayer center (statuses, prayer wall approval, team notes, "I prayed") and Inbox (contact messages, pastoral care) | Done |
+| 11a | Sermon library management | Done |
 | 7 | Live streaming center (Restream, destinations, moderated live chat) | Planned |
 | 8 | Giving (Stripe and PayPal Edge Functions, sandbox first) | Planned |
 | 9 | Ministries and events management | Planned |
@@ -32,6 +36,10 @@ A full-stack church website, member portal and administration platform for Globa
 - **GCC Control Center** (role-gated): Overview, Website settings (Senior Pastor name, photo, biography and contact; church details; hero; welcome; about; mission and vision; social links), Roles and access (Super Administrator only), Audit log. The other sections are listed with the phase that builds them.
 - **Online Bible** using bible-api.com (free, no key, public-domain World English Bible and King James Version only, so no licence is required).
 - **Installable web app** (manifest and icons), SEO titles and descriptions per page, keyboard navigation, skip link, visible focus, reduced-motion support, code-split pages.
+
+## Watching services online (free)
+
+Viewers never pay or sign in to watch. In **Control Center > Live streaming**, save your YouTube channel ID once: the Watch Live page then plays whatever the channel is streaming, automatically. Schedule broadcasts there to show a countdown, press **Go live** and **End**, and moderate the live chat. Stream from free OBS Studio (or the YouTube phone app); the free OBS plugin "Multiple RTMP outputs" sends the same service to Facebook too. Afterwards add the recording under **Sermons**. Apply `supabase/migrations/20261128000007_live_backend.sql` (realtime chat, "I prayed", inbox) along with the earlier migrations.
 
 ## Run it locally
 

@@ -1,20 +1,22 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, CalendarCheck, Globe2, HandHeart, HeartHandshake, MapPin, Radio, Sparkles } from "lucide-react";
+import { ArrowRight, CalendarCheck, Compass, HandHeart, Radio } from "lucide-react";
 import { useSeo } from "@/lib/seo";
 import { useCollection, useSettings } from "@/lib/data";
 import { demoBroadcast, demoEvents, demoMinistries, demoSermons, demoTestimonies } from "@/lib/demo";
 import type { Broadcast, ChurchEvent, Ministry, Sermon, Testimony } from "@/lib/types";
 import { ButtonLink } from "@/components/ui/Button";
-import { AwaitingBadge, DemoBadge, Reveal, Section, SectionHeading } from "@/components/ui/Misc";
+import { DemoBadge, Reveal, Section, SectionHeading } from "@/components/ui/Misc";
 import { Countdown, EventCard, MinistryCard, PersonPhoto, SermonCard, TestimonyCard } from "@/components/Cards";
 import { NewsletterForm } from "@/components/forms/NewsletterForm";
 import { SocialLinks } from "@/components/layout/Footer";
 import { formatDateTime } from "@/lib/utils";
+import { FOUNDED_ON, FOUNDER_NAME, founderIntro, founderStory } from "@/lib/founder";
+import { FreeWorshipBand, MissionGrid, WorldMessage } from "@/components/Founder";
 
 const nowIso = () => new Date(Date.now() - 3 * 3600_000).toISOString();
 
 export default function Home() {
-  useSeo("Global Christian Church", "Global Christian Church: One Faith. One Family. Reaching the World. Watch live, explore sermons, request prayer and give online.");
+  useSeo("Global Christian Church", `Global Christian Church, founded by ${FOUNDER_NAME}: a free online church for healing, restoration and the awakening of humanity. Watch live free from anywhere.`);
   const { settings: s } = useSettings();
   const sermons = useCollection<Sermon>("sermons", demoSermons.filter((x) => x.is_featured), { eq: { status: "published", is_featured: true }, order: "preached_on", limit: 3 });
   const events = useCollection<ChurchEvent>("events", demoEvents, { eq: { status: "published" }, gte: { starts_at: nowIso() }, order: "starts_at", ascending: true, limit: 4 });
@@ -43,16 +45,16 @@ export default function Home() {
         </svg>
 
         <div className="container pb-24 pt-36 text-center">
-          <p className="eyebrow mb-8 animate-fade-up">Global Christian Church</p>
+          <p className="eyebrow mb-8 animate-fade-up">Global Christian Church · Founded {FOUNDED_ON} by {FOUNDER_NAME}</p>
           <h1 className="mx-auto max-w-5xl animate-fade-up text-[2.9rem] font-medium uppercase leading-[0.98] tracking-[0.02em] [animation-delay:150ms] sm:text-7xl lg:text-[6.2rem]">
             <span className="block">One Faith.</span><span className="block">One Family.</span><span className="gold-text block italic normal-case">Reaching the World.</span>
           </h1>
           <p className="mx-auto mt-8 max-w-xl animate-fade-up text-base text-ivory-muted [animation-delay:300ms] sm:text-lg">{s.hero.subheadline}</p>
           <div className="mt-12 flex animate-fade-up flex-col items-center justify-center gap-4 [animation-delay:450ms] sm:flex-row">
-            <ButtonLink to="/watch" size="lg"><Radio className="h-4 w-4" aria-hidden />Watch Live</ButtonLink>
-            <ButtonLink to="/visit" variant="outline" size="lg"><MapPin className="h-4 w-4" aria-hidden />Plan Your Visit</ButtonLink>
-            <ButtonLink to="/give" variant="ivory" size="lg"><HandHeart className="h-4 w-4" aria-hidden />Give Online</ButtonLink>
+            <ButtonLink to="/watch" size="lg"><Radio className="h-4 w-4" aria-hidden />Watch Live Free</ButtonLink>
+            <ButtonLink to="/vision-mission" variant="outline" size="lg"><Compass className="h-4 w-4" aria-hidden />Discover the Vision</ButtonLink>
           </div>
+          <p className="mx-auto mt-10 inline-flex animate-fade-up items-center gap-2 rounded-full border border-gold/30 bg-ink/40 px-5 py-2 text-xs text-ivory-muted backdrop-blur [animation-delay:600ms] sm:text-sm"><span className="font-semibold text-gold-light">100% free</span> No membership, no subscription, no paywall. Ever.</p>
         </div>
         <div aria-hidden className="absolute bottom-8 left-1/2 h-14 w-px -translate-x-1/2 bg-gradient-to-b from-gold to-transparent" />
       </section>
@@ -73,39 +75,23 @@ export default function Home() {
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <Reveal className="relative mx-auto w-full max-w-md">
             <div className="absolute -inset-4 rounded-[2rem] border border-gold/20" aria-hidden />
-            <PersonPhoto src={pastor.photo_url} name={pastor.name ?? "Senior Pastor"} className="aspect-[4/5] w-full rounded-3xl shadow-luxe" />
+            <PersonPhoto src={pastor.photo_url} name={pastor.name ?? FOUNDER_NAME} className="aspect-[4/5] w-full rounded-3xl shadow-luxe" />
           </Reveal>
           <Reveal delay={150}>
             <p className="eyebrow mb-4">{pastor.title}</p>
-            <h2 className="text-5xl">{pastor.name ?? "Senior Pastor"}</h2>
+            <h2 className="text-5xl">{pastor.name ?? FOUNDER_NAME}</h2>
             <div className="gold-rule mt-6" />
-            {pastor.bio ? <p className="mt-6 whitespace-pre-line text-lg leading-relaxed text-ivory-muted">{pastor.bio}</p> : (
-              <div className="mt-6 space-y-4">
-                <AwaitingBadge label="Awaiting official information" />
-                <p className="text-ivory-muted">The Senior Pastor’s name, photograph, biography and contact details will appear here once a church administrator adds them in the GCC Control Center.</p>
-              </div>
-            )}
-            <ButtonLink to="/leadership" variant="outline" className="mt-8">Meet our leadership <ArrowRight className="h-4 w-4" aria-hidden /></ButtonLink>
+            <p className="mt-6 font-display text-2xl leading-snug text-ivory">{founderIntro}</p>
+            <p className="mt-5 text-lg leading-relaxed text-ivory-muted">{founderStory[0]} {founderStory[1]}</p>
+            <ButtonLink to="/about-the-pastor" variant="outline" className="mt-8">Read his story <ArrowRight className="h-4 w-4" aria-hidden /></ButtonLink>
           </Reveal>
         </div>
       </Section>
 
       {/* MISSION AND VISION */}
       <Section>
-        <SectionHeading eyebrow="Why we exist" title={<>Mission <span className="gold-text italic">and</span> vision</>} />
-        <div className="grid gap-6 md:grid-cols-3">
-          {[
-            { Icon: Sparkles, title: "One Faith", body: s.mission_vision.mission },
-            { Icon: HeartHandshake, title: "One Family", body: null },
-            { Icon: Globe2, title: "Reaching the World", body: s.mission_vision.vision },
-          ].map(({ Icon, title, body }, i) => (
-            <Reveal key={title} delay={i * 120} className="card-luxe p-8 text-center">
-              <Icon className="mx-auto h-8 w-8 text-gold" aria-hidden />
-              <h3 className="mt-5 text-3xl">{title}</h3>
-              <p className="mt-4 text-sm leading-relaxed text-ivory-muted">{body ?? "The church’s official statement will be published here by church leadership."}</p>
-            </Reveal>
-          ))}
-        </div>
+        <SectionHeading eyebrow="Our mission" title={<>Healing hearts. <span className="gold-text italic">Awakening purpose.</span></>} intro="A spiritual home where people from every background can find God, experience healing, discover their identity and grow into their divine purpose." />
+        <MissionGrid />
         <div className="mt-10 text-center"><ButtonLink to="/vision-mission" variant="ghost">Read our vision and mission <ArrowRight className="h-4 w-4" aria-hidden /></ButtonLink></div>
       </Section>
 
@@ -128,6 +114,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <FreeWorshipBand />
 
       {/* FEATURED SERMONS */}
       <Section>
@@ -180,9 +168,10 @@ export default function Home() {
       <Section>
         <div className="card-luxe grid items-center gap-10 p-10 sm:p-14 lg:grid-cols-2 lg:hover:translate-y-0">
           <div>
-            <p className="eyebrow mb-4">Online giving</p>
+            <p className="eyebrow mb-4">Give / Support · Optional</p>
             <h2 className="text-4xl sm:text-5xl">Partner with the mission</h2>
-            <p className="mt-6 text-ivory-muted">Support tithes, offerings, missions, the building fund, benevolence and special projects securely online.</p>
+            <p className="mt-6 text-ivory-muted">For those who voluntarily wish to support the ministry: tithes, offerings, missions and special projects.</p>
+            <p className="mt-4 text-sm font-semibold text-gold-light">Giving is always optional and never required to watch, join or belong.</p>
           </div>
           <div className="grid grid-cols-2 gap-3 text-sm">
             {["Tithes", "Offerings", "Missions", "Building fund", "Benevolence", "Special projects"].map((c) => (
@@ -210,6 +199,7 @@ export default function Home() {
           </div>
         </div>
       </Section>
+      <WorldMessage />
     </>
   );
 }
